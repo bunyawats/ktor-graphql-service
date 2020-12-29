@@ -1,8 +1,5 @@
-import org.jetbrains.kotlin.gradle.dsl.Coroutines
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import nu.studer.gradle.jooq.JooqEdition
-import org.jooq.meta.jaxb.ForcedType
 import org.jooq.meta.jaxb.Property
 
 val ktor_version: String by project
@@ -13,6 +10,7 @@ plugins {
     application
     kotlin("jvm") version "1.4.21"
     id("nu.studer.jooq") version "5.2"
+    id("com.github.johnrengelman.shadow") version "5.1.0"
 }
 
 group = "com.ssc.ktor.graphql"
@@ -45,7 +43,7 @@ dependencies {
     implementation("io.ktor:ktor-client-json-jvm:$ktor_version")
     implementation("io.ktor:ktor-client-gson:$ktor_version")
     implementation("io.ktor:ktor-client-logging-jvm:$ktor_version")
-    testImplementation("io.ktor:ktor-server-tests:$ktor_version")
+    implementation("io.ktor:ktor-jackson:$ktor_version")
 
     implementation("javax.annotation:javax.annotation-api:1.3.2")
     implementation("org.flywaydb:flyway-core:7.3.2")
@@ -53,6 +51,7 @@ dependencies {
     implementation("mysql:mysql-connector-java:8.0.22")
 
     jooqGenerator("mysql:mysql-connector-java:8.0.22")
+    testImplementation("io.ktor:ktor-server-tests:$ktor_version")
 }
 
 kotlin.sourceSets["main"].kotlin.srcDirs("src")
@@ -101,6 +100,22 @@ jooq {
                 }
             }
         }
+    }
+}
+
+tasks {
+    named<ShadowJar>("shadowJar") {
+        archiveBaseName.set("joo-ktor")
+        mergeServiceFiles()
+        manifest {
+            attributes(mapOf("Main-Class" to application.mainClassName))
+        }
+    }
+}
+
+tasks {
+    build {
+        dependsOn(shadowJar)
     }
 }
 

@@ -9,6 +9,7 @@ import com.ssc.jooq.db.tables.Channel.CHANNEL as ChannelTable
 class TvService @KtorExperimentalAPI constructor(private val database: Database) {
 
     suspend fun getChannels(pageable: Pageable): List<Channel> {
+        println(" \n in getChannels \n ")
         return database.query {
             it.select()
                 .from(ChannelTable)

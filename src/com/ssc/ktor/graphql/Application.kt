@@ -1,35 +1,32 @@
 package com.ssc.ktor.graphql
 
+import com.fasterxml.jackson.databind.SerializationFeature
 import com.ssc.ktor.graphql.database.Database
 import com.ssc.ktor.graphql.database.FlywayFeature
+import com.ssc.ktor.graphql.domain.Pageable
+import com.ssc.ktor.graphql.errors.statusPageConfiguration
+import com.ssc.ktor.graphql.rest.channels
+import com.ssc.ktor.graphql.rest.jackson.customJackson
+import com.ssc.ktor.graphql.service.TvService
 import freemarker.cache.ClassTemplateLoader
 import io.ktor.application.*
 import io.ktor.auth.*
-import io.ktor.client.*
-import io.ktor.client.engine.apache.*
-import io.ktor.client.features.*
-import io.ktor.client.features.auth.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.logging.*
 import io.ktor.features.*
 import io.ktor.freemarker.*
 import io.ktor.http.*
 import io.ktor.locations.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import kotlinx.coroutines.runBlocking
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
-@Suppress("unused") // Referenced in application.conf
-@kotlin.jvm.JvmOverloads
+
 fun Application.module(testing: Boolean = false) {
     install(FreeMarker) {
         templateLoader = ClassTemplateLoader(this::class.java.classLoader, "templates")
     }
 
-    install(Locations) {
-    }
+
 
     install(CORS) {
         method(HttpMethod.Options)
@@ -50,33 +47,20 @@ fun Application.module(testing: Boolean = false) {
     }
 
     val database = Database(this)
-    install(FlywayFeature) { dataSource = database.connectionPool }
+    val tvService = TvService(database)
 
-    val client = HttpClient(Apache) {
-        install(Auth) {
-        }
-        install(JsonFeature) {
-            serializer = GsonSerializer()
-        }
-        install(Logging) {
-            level = LogLevel.HEADERS
-        }
-        BrowserUserAgent() // install default browser-like user-agent
-        // install(UserAgent) { agent = "some user agent" }
-    }
-    runBlocking {
-        // Sample for making a HTTP Client request
-        /*
-        val message = client.post<JsonSampleClass> {
-            url("http://127.0.0.1:8080/path/to/endpoint")
-            contentType(ContentType.Application.Json)
-            body = JsonSampleClass(hello = "world")
-        }
-        */
-    }
+    install(Locations)
+    install(StatusPages, statusPageConfiguration)
+    install(FlywayFeature) { dataSource = database.connectionPool }
+    install(ContentNegotiation) { customJackson { enable(SerializationFeature.INDENT_OUTPUT) } }
 
     routing {
+
+        channels(tvService)
+
         get("/") {
+
+            println("\n ${tvService.getChannels(Pageable(0, 5))}" )
             call.respondText("HELLO WORLD!", contentType = ContentType.Text.Plain)
         }
 
@@ -109,7 +93,8 @@ data class IndexData(val items: List<Int>)
 @Location("/location/{name}")
 class MyLocation(val name: String, val arg1: Int = 42, val arg2: String = "default")
 
-@Location("/type/{name}") data class Type(val name: String) {
+@Location("/type/{name}")
+data class Type(val name: String) {
     @Location("/edit")
     data class Edit(val type: Type)
 
