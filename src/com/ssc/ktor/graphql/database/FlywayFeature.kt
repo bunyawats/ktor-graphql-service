@@ -1,11 +1,8 @@
 package com.ssc.ktor.graphql.database
 
-import io.ktor.application.Application
-import io.ktor.application.ApplicationFeature
-import io.ktor.application.log
-import io.ktor.config.ApplicationConfigurationException
-import io.ktor.util.AttributeKey
-import io.ktor.util.KtorExperimentalAPI
+import io.ktor.application.*
+import io.ktor.config.*
+import io.ktor.util.*
 import org.flywaydb.core.Flyway
 import javax.sql.DataSource
 
