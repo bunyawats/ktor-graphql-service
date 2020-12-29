@@ -1,4 +1,4 @@
-package com.ssc.ktor.graphql.com.ssc.ktor.graphql.database
+package com.ssc.ktor.graphql.database
 
 import io.ktor.application.Application
 import io.ktor.application.ApplicationFeature

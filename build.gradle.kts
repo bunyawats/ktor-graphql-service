@@ -87,9 +87,11 @@ jooq {
                     }
                     generate.apply {
                         isDeprecated = false
-                        isRecords = false
-                        isImmutablePojos = false
-                        isFluentSetters = false
+                        isRecords = true
+                        isImmutablePojos = true
+                        isFluentSetters = true
+                        isRelations = true
+                        isJavaTimeTypes = true
                     }
                     target.apply {
                         packageName = "com.ssc.jooq.db"

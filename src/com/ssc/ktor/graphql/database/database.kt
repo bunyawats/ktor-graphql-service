@@ -1,4 +1,4 @@
-package com.ssc.ktor.graphql.com.ssc.ktor.graphql.database
+package com.ssc.ktor.graphql.database
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
@@ -29,11 +29,11 @@ class Database(application: Application) {
     }
 
     suspend fun <T> query(block: (DSLContext) -> T): T = withContext(Dispatchers.IO) {
-        block(DSL.using(connectionPool, SQLDialect.POSTGRES))
+        block(DSL.using(connectionPool, SQLDialect.MYSQL))
     }
 
     suspend fun <T> write(block: (DSLContext) -> T): T = withContext(Dispatchers.IO) {
-        DSL.using(connectionPool, SQLDialect.POSTGRES)
+        DSL.using(connectionPool, SQLDialect.MYSQL)
                 .transactionResultAsync { config -> block(DSL.using(config)) }.await()
     }
 }
