@@ -47,8 +47,11 @@ dependencies {
     implementation("io.ktor:ktor-client-logging-jvm:$ktor_version")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
 
-
+    implementation("javax.annotation:javax.annotation-api:1.3.2")
+    implementation("org.flywaydb:flyway-core:7.3.2")
+    implementation("com.zaxxer:HikariCP:3.4.5")
     implementation("mysql:mysql-connector-java:8.0.22")
+
     jooqGenerator("mysql:mysql-connector-java:8.0.22")
 }
 

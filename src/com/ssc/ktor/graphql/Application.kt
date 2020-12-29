@@ -1,5 +1,7 @@
 package com.ssc.ktor.graphql
 
+import com.ssc.ktor.graphql.com.ssc.ktor.graphql.database.Database
+import com.ssc.ktor.graphql.com.ssc.ktor.graphql.database.FlywayFeature
 import io.ktor.application.*
 import io.ktor.response.*
 import io.ktor.request.*
@@ -49,6 +51,9 @@ fun Application.module(testing: Boolean = false) {
             validate { if (it.name == "test" && it.password == "password") UserIdPrincipal(it.name) else null }
         }
     }
+
+    val database = Database(this)
+    install(FlywayFeature) { dataSource = database.connectionPool }
 
     val client = HttpClient(Apache) {
         install(Auth) {
