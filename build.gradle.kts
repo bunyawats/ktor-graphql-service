@@ -1,6 +1,10 @@
 import org.jetbrains.kotlin.gradle.dsl.Coroutines
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+import nu.studer.gradle.jooq.JooqEdition
+import org.jooq.meta.jaxb.ForcedType
+import org.jooq.meta.jaxb.Property
+
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
@@ -8,6 +12,7 @@ val logback_version: String by project
 plugins {
     application
     kotlin("jvm") version "1.4.21"
+    id("nu.studer.jooq") version "5.2"
 }
 
 group = "com.ssc.ktor.graphql"
@@ -41,6 +46,10 @@ dependencies {
     implementation("io.ktor:ktor-client-gson:$ktor_version")
     implementation("io.ktor:ktor-client-logging-jvm:$ktor_version")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
+
+
+    implementation("mysql:mysql-connector-java:8.0.22")
+    jooqGenerator("mysql:mysql-connector-java:8.0.22")
 }
 
 kotlin.sourceSets["main"].kotlin.srcDirs("src")
@@ -48,3 +57,46 @@ kotlin.sourceSets["test"].kotlin.srcDirs("test")
 
 sourceSets["main"].resources.srcDirs("resources")
 sourceSets["test"].resources.srcDirs("testresources")
+
+jooq {
+    version.set("3.14.4")
+    edition.set(JooqEdition.OSS)
+
+    configurations {
+        create("main") {
+            jooqConfiguration.apply {
+                logging = org.jooq.meta.jaxb.Logging.WARN
+                jdbc.apply {
+                    driver = "com.mysql.cj.jdbc.Driver"
+                    url = "jdbc:mysql://localhost:3306/ktorgraphql"
+                    user = "ktorgraphql"
+                    password = "ktorgraphql"
+                    properties.add(Property().withKey("PAGE_SIZE").withValue("2048"))
+                }
+                generator.apply {
+                    name = "org.jooq.codegen.DefaultGenerator"
+                    database.apply {
+                        name = "org.jooq.meta.mysql.MySQLDatabase"
+                        inputSchema = "ktorgraphql"
+                        includes = ".*"
+                        excludes = "flyway_schema_history"
+
+                    }
+                    generate.apply {
+                        isDeprecated = false
+                        isRecords = false
+                        isImmutablePojos = false
+                        isFluentSetters = false
+                    }
+                    target.apply {
+                        packageName = "com.ssc.jooq.db"
+                        directory = "build/generated/jooq"
+                    }
+                    strategy.name = "org.jooq.codegen.DefaultGeneratorStrategy"
+                }
+            }
+        }
+    }
+}
+
+
