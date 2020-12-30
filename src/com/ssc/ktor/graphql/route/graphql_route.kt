@@ -1,7 +1,7 @@
 package com.ssc.ktor.graphql.route
 
 import com.ssc.ktor.graphql.schema.GraphQLHandler
-import com.ssc.ktor.graphql.service.TvService
+import graphql.GraphQL
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
@@ -11,12 +11,10 @@ import org.kodein.di.instance
 
 fun Route.graphqlRoute(kodein: DI) {
 
-    val tvService by kodein.instance<TvService>()
-    val graphQLHandler = GraphQLHandler()
-
+    val graphQL by kodein.instance<GraphQL>()
 
     post("graphql") {
-        graphQLHandler.handle(this.call)
+        GraphQLHandler().handle(this.call, graphQL)
     }
 
     get("playground") {

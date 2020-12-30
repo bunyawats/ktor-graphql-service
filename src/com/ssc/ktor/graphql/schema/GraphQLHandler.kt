@@ -21,6 +21,7 @@ import com.expediagroup.graphql.toSchema
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.ssc.ktor.graphql.schema.models.*
+import com.ssc.ktor.graphql.service.TvService
 import graphql.ExceptionWhileDataFetching
 import graphql.ExecutionInput
 import graphql.ExecutionResult
@@ -29,7 +30,6 @@ import io.ktor.application.*
 import io.ktor.request.*
 import io.ktor.response.*
 import org.dataloader.DataLoaderRegistry
-import org.kodein.di.DI
 import java.io.IOException
 
 data class AuthorizedContext(val authorizedUser: User? = null, var guestUUID: String? = null)
@@ -38,9 +38,7 @@ class GraphQLHandler {
 
     companion object {
 
-        private lateinit var graphQL: GraphQL
-
-        fun initDI(kodein: DI) {
+        fun initGraphQL(tvService: TvService): GraphQL {
 
             val config = SchemaGeneratorConfig(supportedPackages = listOf("com.ssc.ktor.graphql.schema"))
 
@@ -49,7 +47,7 @@ class GraphQLHandler {
                 TopLevelObject(BookQueryService()),
                 TopLevelObject(CourseQueryService()),
                 TopLevelObject(UniversityQueryService()),
-                TopLevelObject(ChannelOueryService(kodein))
+                TopLevelObject(ChannelQueryService(tvService))
             )
 
             val mutations = listOf(
@@ -58,7 +56,7 @@ class GraphQLHandler {
 
             val graphQLSchema = toSchema(config, queries, mutations)
 
-            graphQL = GraphQL.newGraphQL(graphQLSchema).build()!!
+            return GraphQL.newGraphQL(graphQLSchema).build()!!
         }
     }
 
@@ -130,7 +128,7 @@ class GraphQLHandler {
     /**
      * Execute a query against schema
      */
-    suspend fun handle(applicationCall: ApplicationCall) {
+    suspend fun handle(applicationCall: ApplicationCall, graphQL: GraphQL) {
         val payload = getPayload(applicationCall.request)
 
         payload?.let {

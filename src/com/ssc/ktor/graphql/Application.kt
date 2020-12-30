@@ -10,6 +10,7 @@ import com.ssc.ktor.graphql.route.sampleRoute
 import com.ssc.ktor.graphql.schema.GraphQLHandler
 import com.ssc.ktor.graphql.service.TvService
 import freemarker.cache.ClassTemplateLoader
+import graphql.GraphQL
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.features.*
@@ -21,7 +22,6 @@ import io.ktor.routing.*
 import org.kodein.di.DI
 import org.kodein.di.bind
 import org.kodein.di.provider
-import org.kodein.di.singleton
 import java.text.DateFormat
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
@@ -52,13 +52,12 @@ fun Application.module(testing: Boolean = false) {
 
     val database = Database(this)
     val tvService = TvService(database)
+    val graphQL = GraphQLHandler.initGraphQL(tvService)
 
     val kodein = DI {
-        bind<Database>() with singleton { database }
         bind<TvService>() with provider { tvService }
+        bind<GraphQL>() with provider { graphQL }
     }
-
-    GraphQLHandler.initDI(kodein)
 
     install(Locations)
     install(StatusPages, statusPageConfiguration)
