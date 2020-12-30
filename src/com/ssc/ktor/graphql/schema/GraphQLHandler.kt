@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ssc.ktor.graphql.rest
+package com.ssc.ktor.graphql.schema
 
 import com.expediagroup.graphql.SchemaGeneratorConfig
 import com.expediagroup.graphql.TopLevelObject
 import com.expediagroup.graphql.toSchema
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.ssc.ktor.graphql.schema.*
 import com.ssc.ktor.graphql.schema.models.*
 import graphql.ExceptionWhileDataFetching
 import graphql.ExecutionInput

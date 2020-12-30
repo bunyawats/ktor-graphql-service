@@ -1,5 +1,6 @@
-package com.ssc.ktor.graphql.rest
+package com.ssc.ktor.graphql.route
 
+import com.ssc.ktor.graphql.schema.GraphQLHandler
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*

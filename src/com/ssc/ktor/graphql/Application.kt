@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.ssc.ktor.graphql.database.Database
 import com.ssc.ktor.graphql.database.FlywayFeature
 import com.ssc.ktor.graphql.errors.statusPageConfiguration
-import com.ssc.ktor.graphql.rest.channels
-import com.ssc.ktor.graphql.rest.graphqlRoute
-import com.ssc.ktor.graphql.rest.sampleRoute
+import com.ssc.ktor.graphql.route.channels
+import com.ssc.ktor.graphql.route.graphqlRoute
+import com.ssc.ktor.graphql.route.sampleRoute
 import com.ssc.ktor.graphql.service.TvService
 import freemarker.cache.ClassTemplateLoader
 import io.ktor.application.*

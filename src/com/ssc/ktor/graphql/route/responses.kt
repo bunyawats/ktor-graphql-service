@@ -1,4 +1,4 @@
-package com.ssc.ktor.graphql.rest
+package com.ssc.ktor.graphql.route
 
 import com.ssc.ktor.graphql.exceptions.FindAnotherNameException
 import io.ktor.http.*

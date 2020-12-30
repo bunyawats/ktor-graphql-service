@@ -1,4 +1,4 @@
-package com.ssc.ktor.graphql.rest
+package com.ssc.ktor.graphql.route
 
 import com.ssc.ktor.graphql.domain.Channel
 import com.ssc.ktor.graphql.domain.Pageable
