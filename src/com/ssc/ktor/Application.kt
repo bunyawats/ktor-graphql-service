@@ -1,14 +1,17 @@
-package com.ssc.ktor.graphql
+package com.ssc.ktor
 
+import com.expediagroup.graphql.SchemaGeneratorConfig
+import com.expediagroup.graphql.TopLevelObject
+import com.expediagroup.graphql.toSchema
 import com.fasterxml.jackson.databind.SerializationFeature
-import com.ssc.ktor.graphql.database.Database
-import com.ssc.ktor.graphql.database.FlywayFeature
-import com.ssc.ktor.graphql.errors.statusPageConfiguration
-import com.ssc.ktor.graphql.route.channels
-import com.ssc.ktor.graphql.route.graphqlRoute
-import com.ssc.ktor.graphql.route.sampleRoute
-import com.ssc.ktor.graphql.schema.GraphQLHandler
-import com.ssc.ktor.graphql.service.TvService
+import com.ssc.ktor.database.Database
+import com.ssc.ktor.database.FlywayFeature
+import com.ssc.ktor.graphql.*
+import com.ssc.ktor.route.channels
+import com.ssc.ktor.route.graphqlRoute
+import com.ssc.ktor.route.response.statusPageConfiguration
+import com.ssc.ktor.route.sampleRoute
+import com.ssc.ktor.service.TvService
 import freemarker.cache.ClassTemplateLoader
 import graphql.GraphQL
 import io.ktor.application.*
@@ -52,7 +55,7 @@ fun Application.module(testing: Boolean = false) {
 
     val database = Database(this)
     val tvService = TvService(database)
-    val graphQL = GraphQLHandler.initGraphQL(tvService)
+    val graphQL = initGraphGL(tvService)
 
     val kodein = DI {
         bind<TvService>() with provider { tvService }
@@ -78,4 +81,25 @@ fun Application.module(testing: Boolean = false) {
     }
 }
 
+fun initGraphGL(tvService: TvService): GraphQL {
+
+    val config = SchemaGeneratorConfig(supportedPackages = listOf("com.ssc.ktor.graphql"))
+
+    val queries = listOf(
+        TopLevelObject(HelloQueryService()),
+        TopLevelObject(BookQueryService()),
+        TopLevelObject(CourseQueryService()),
+        TopLevelObject(UniversityQueryService()),
+        TopLevelObject(ChannelQueryService(tvService))
+    )
+
+    val mutations = listOf(
+        TopLevelObject(LoginMutationService())
+    )
+
+    val graphQLSchema = toSchema(config, queries, mutations)
+
+    return GraphQL.newGraphQL(graphQLSchema).build()!!
+
+}
 

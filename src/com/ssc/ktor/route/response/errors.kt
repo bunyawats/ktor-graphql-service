@@ -1,7 +1,7 @@
-package com.ssc.ktor.graphql.errors
+package com.ssc.ktor.route.response
 
-import com.ssc.ktor.graphql.exceptions.BadRequestBodyException
-import com.ssc.ktor.graphql.route.ErrorResp
+import com.ssc.ktor.route.ErrorResp
+import com.ssc.ktor.route.exceptions.BadRequestBodyException
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*

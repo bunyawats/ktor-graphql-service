@@ -1,8 +1,8 @@
-package com.ssc.ktor.graphql.route
+package com.ssc.ktor.route
 
-import com.ssc.ktor.graphql.domain.Pageable
-import com.ssc.ktor.graphql.schema.models.Channel
-import com.ssc.ktor.graphql.service.TvService
+import com.ssc.ktor.graphql.models.Channel
+import com.ssc.ktor.service.TvService
+import com.ssc.ktor.service.domain.Pageable
 import io.ktor.application.*
 import io.ktor.locations.*
 import io.ktor.request.*

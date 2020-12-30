@@ -13,15 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ssc.ktor.graphql.schema
+package com.ssc.ktor.graphql.models
 
-import com.ssc.ktor.graphql.schema.models.University
 import graphql.GraphQLException
 
-class UniversityQueryService {
-    @Throws(GraphQLException::class)
-    suspend fun searchUniversities(params: UniversitySearchParameters): List<University> =
-        University.search(params.ids)
-}
+data class User(
+    val email: String,
+    val firstName: String?,
+    val lastName: String?,
+    val universityId: Long?,
+    val isAdmin: Boolean = false
+) {
+    suspend fun university(): University? {
+        universityId ?: return null
+        return University.search(listOf(universityId))[0]
+    }
 
-data class UniversitySearchParameters(val ids: List<Long>)
+    fun longThatNeverComes(): Long =
+        throw GraphQLException("This value will never return")
+}

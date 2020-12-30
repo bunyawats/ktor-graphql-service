@@ -13,22 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ssc.ktor.graphql.schema.models
+package com.ssc.ktor.graphql
 
-import graphql.GraphQLException
+import com.expediagroup.graphql.annotations.GraphQLDescription
+import com.ssc.ktor.graphql.models.Book
 
-data class User(
-    val email: String,
-    val firstName: String?,
-    val lastName: String?,
-    val universityId: Long?,
-    val isAdmin: Boolean = false
-) {
-    suspend fun university(): University? {
-        universityId ?: return null
-        return University.search(listOf(universityId))[0]
-    }
-
-    fun longThatNeverComes(): Long =
-        throw GraphQLException("This value will never return")
+/**
+ * Provide Search options for book data
+ */
+class BookQueryService {
+    @GraphQLDescription("Return list of books based on BookSearchParameter options")
+    @Suppress("unused")
+    suspend fun searchBooks(params: BookSearchParameters) = Book.search(params.ids)
 }
+
+data class BookSearchParameters(val ids: List<Long>)

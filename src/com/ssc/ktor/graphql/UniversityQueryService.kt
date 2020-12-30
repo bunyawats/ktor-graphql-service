@@ -13,8 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ssc.ktor.graphql.schema
+package com.ssc.ktor.graphql
 
-class HelloQueryService {
-    fun hello() = "World!"
+import com.ssc.ktor.graphql.models.University
+import graphql.GraphQLException
+
+class UniversityQueryService {
+    @Throws(GraphQLException::class)
+    suspend fun searchUniversities(params: UniversitySearchParameters): List<University> =
+        University.search(params.ids)
 }
+
+data class UniversitySearchParameters(val ids: List<Long>)

@@ -13,18 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ssc.ktor.graphql.schema
+package com.ssc.ktor.graphql
 
-import com.expediagroup.graphql.annotations.GraphQLDescription
-import com.ssc.ktor.graphql.schema.models.Book
+import com.ssc.ktor.graphql.models.Course
 
-/**
- * Provide Search options for book data
- */
-class BookQueryService {
-    @GraphQLDescription("Return list of books based on BookSearchParameter options")
-    @Suppress("unused")
-    suspend fun searchBooks(params: BookSearchParameters) = Book.search(params.ids)
+class CourseQueryService {
+    suspend fun searchCourses(params: CourseSearchParameters) = Course.search(params.ids)
 }
 
-data class BookSearchParameters(val ids: List<Long>)
+data class CourseSearchParameters(val ids: List<Long>)

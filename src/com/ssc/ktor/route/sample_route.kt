@@ -1,4 +1,4 @@
-package com.ssc.ktor.graphql.route
+package com.ssc.ktor.route
 
 import io.ktor.application.*
 import io.ktor.auth.*

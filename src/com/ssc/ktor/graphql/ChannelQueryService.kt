@@ -1,7 +1,7 @@
-package com.ssc.ktor.graphql.schema
+package com.ssc.ktor.graphql
 
 import com.expediagroup.graphql.annotations.GraphQLDescription
-import com.ssc.ktor.graphql.service.TvService
+import com.ssc.ktor.service.TvService
 
 
 class ChannelQueryService(private val tvService: TvService) {

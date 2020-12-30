@@ -1,4 +1,4 @@
-package com.ssc.ktor.graphql.exceptions
+package com.ssc.ktor.route.exceptions
 
 import io.ktor.http.*
 

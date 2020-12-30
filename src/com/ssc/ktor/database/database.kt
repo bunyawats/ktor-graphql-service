@@ -1,4 +1,4 @@
-package com.ssc.ktor.graphql.database
+package com.ssc.ktor.database
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource

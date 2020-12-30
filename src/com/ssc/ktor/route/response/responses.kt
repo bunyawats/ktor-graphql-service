@@ -1,6 +1,6 @@
-package com.ssc.ktor.graphql.route
+package com.ssc.ktor.route
 
-import com.ssc.ktor.graphql.exceptions.FindAnotherNameException
+import com.ssc.ktor.route.exceptions.FindAnotherNameException
 import io.ktor.http.*
 
 class SuccessResp<T> private constructor(val result: T) {

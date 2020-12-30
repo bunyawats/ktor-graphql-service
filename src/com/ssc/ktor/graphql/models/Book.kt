@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ssc.ktor.graphql.schema.models
+package com.ssc.ktor.graphql.models
 
 import com.expediagroup.graphql.annotations.GraphQLDescription
 import kotlinx.coroutines.runBlocking

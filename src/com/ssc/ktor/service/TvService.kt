@@ -1,8 +1,8 @@
-package com.ssc.ktor.graphql.service
+package com.ssc.ktor.service
 
-import com.ssc.ktor.graphql.database.Database
-import com.ssc.ktor.graphql.domain.Pageable
-import com.ssc.ktor.graphql.schema.models.Channel
+import com.ssc.ktor.database.Database
+import com.ssc.ktor.graphql.models.Channel
+import com.ssc.ktor.service.domain.Pageable
 import com.ssc.jooq.db.tables.Channel.CHANNEL as ChannelTable
 
 class TvService constructor(private val database: Database) {
