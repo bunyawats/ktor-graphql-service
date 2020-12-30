@@ -1,6 +1,7 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import nu.studer.gradle.jooq.JooqEdition
 import org.jooq.meta.jaxb.Property
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val ktor_version: String by project
 val kotlin_version: String by project
@@ -18,6 +19,12 @@ version = "0.0.1"
 
 application {
     mainClassName = "io.ktor.server.netty.EngineMain"
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 repositories {
@@ -51,10 +58,12 @@ dependencies {
     implementation("mysql:mysql-connector-java:8.0.22")
 
     implementation("com.expediagroup:graphql-kotlin-schema-generator:4.0.0-alpha.8")
+    implementation("org.kodein.di:kodein-di:7.2.0")
 
     jooqGenerator("mysql:mysql-connector-java:8.0.22")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
 }
+
 
 kotlin.sourceSets["main"].kotlin.srcDirs("src")
 kotlin.sourceSets["test"].kotlin.srcDirs("test")
@@ -104,6 +113,7 @@ jooq {
         }
     }
 }
+
 
 tasks {
     named<ShadowJar>("shadowJar") {

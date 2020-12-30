@@ -1,12 +1,17 @@
 package com.ssc.ktor.graphql.route
 
 import com.ssc.ktor.graphql.schema.GraphQLHandler
+import com.ssc.ktor.graphql.service.TvService
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import org.kodein.di.DI
+import org.kodein.di.instance
 
-fun Route.graphqlRoute() {
+fun Route.graphqlRoute(kodein: DI) {
+
+    val  tvService by kodein.instance<TvService>()
 
 
     post("graphql") {

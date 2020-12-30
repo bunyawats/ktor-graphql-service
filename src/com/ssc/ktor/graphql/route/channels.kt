@@ -8,8 +8,11 @@ import io.ktor.locations.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import org.kodein.di.*
 
-fun Route.channels(tvService: TvService) {
+fun Route.channels(kodein: DI) {
+
+    val  tvService by kodein.instance<TvService>()
 
     // ../channels
     get<ChannelsLocation> { location ->

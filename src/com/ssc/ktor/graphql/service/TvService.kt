@@ -3,10 +3,9 @@ package com.ssc.ktor.graphql.service
 import com.ssc.ktor.graphql.database.Database
 import com.ssc.ktor.graphql.schema.models.Channel
 import com.ssc.ktor.graphql.domain.Pageable
-import io.ktor.util.*
 import com.ssc.jooq.db.tables.Channel.CHANNEL as ChannelTable
 
-class TvService @KtorExperimentalAPI constructor(private val database: Database) {
+class TvService constructor(private val database: Database) {
 
     suspend fun getChannels(pageable: Pageable): List<Channel> {
 
@@ -19,6 +18,18 @@ class TvService @KtorExperimentalAPI constructor(private val database: Database)
                 .offset(pageable.size * pageable.page)
                 .limit(pageable.size)
                 .fetchInto(Channel::class.java)
+        }
+    }
+
+    suspend fun getChannel(id: Int): Channel {
+
+        println(" \n in TvService.getChannel $id \n ")
+
+        return database.query {
+            it.select()
+                .from(ChannelTable)
+                .where(ChannelTable.ID.eq(id))
+                .fetchInto(Channel::class.java)[0]
         }
     }
 

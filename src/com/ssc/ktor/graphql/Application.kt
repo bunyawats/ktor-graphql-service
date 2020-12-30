@@ -17,7 +17,9 @@ import io.ktor.http.*
 import io.ktor.jackson.*
 import io.ktor.locations.*
 import io.ktor.routing.*
+import org.kodein.di.*
 import java.text.DateFormat
+import org.kodein.di.singleton as singleton
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -48,6 +50,11 @@ fun Application.module(testing: Boolean = false) {
     val database = Database(this)
     val tvService = TvService(database)
 
+    val kodein = DI {
+        bind<Database>() with singleton { database }
+        bind<TvService>() with provider { tvService }
+    }
+
     install(Locations)
     install(StatusPages, statusPageConfiguration)
     install(FlywayFeature) {
@@ -62,8 +69,8 @@ fun Application.module(testing: Boolean = false) {
 
     routing {
         sampleRoute()
-        channels(tvService)
-        graphqlRoute()
+        channels(kodein)
+        graphqlRoute(kodein)
     }
 }
 
