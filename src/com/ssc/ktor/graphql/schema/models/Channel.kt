@@ -10,13 +10,4 @@ data class Channel(
     val logo: String,
     val archived: Boolean,
     val rank: Int?
-) {
-
-    @Suppress("unused")
-    companion object {
-
-        suspend fun search(id: Int, tvService: TvService): Channel {
-            return tvService.getChannel(id)
-        }
-    }
-}
+)

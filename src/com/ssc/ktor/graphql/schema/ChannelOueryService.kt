@@ -12,6 +12,6 @@ class ChannelOueryService(kodein: DI) {
 
     @GraphQLDescription("Return list of channel based on ChannelSearchParameters options")
     @Suppress("unused")
-    suspend fun getChannel(id: Int) = Channel.search(id, tvService)
+    suspend fun getChannel(id: Int) = tvService.getChannel(id);
 }
 
