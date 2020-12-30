@@ -115,10 +115,9 @@ class GraphQLHandler(private val graphQL: GraphQL) {
                     .dataLoaderRegistry(dataLoaderRegistry)
                     .context(getContext(applicationCall.request))
             ).get()
-            val result = getResult(executionResult)
+            val resultMap = getResult(executionResult)
 
-            // write response as json
-            applicationCall.response.call.respond(mapper.writeValueAsString(result))
+            applicationCall.respond(resultMap)
         }
     }
 }
