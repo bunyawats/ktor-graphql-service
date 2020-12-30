@@ -5,6 +5,7 @@ import com.ssc.ktor.graphql.database.Database
 import com.ssc.ktor.graphql.database.FlywayFeature
 import com.ssc.ktor.graphql.errors.statusPageConfiguration
 import com.ssc.ktor.graphql.rest.channels
+import com.ssc.ktor.graphql.rest.graphqlRoute
 import com.ssc.ktor.graphql.rest.sampleRoute
 import com.ssc.ktor.graphql.service.TvService
 import freemarker.cache.ClassTemplateLoader
@@ -62,6 +63,7 @@ fun Application.module(testing: Boolean = false) {
     routing {
         sampleRoute()
         channels(tvService)
+        graphqlRoute()
     }
 }
 

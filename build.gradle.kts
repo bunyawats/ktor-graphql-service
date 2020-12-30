@@ -50,6 +50,8 @@ dependencies {
     implementation("com.zaxxer:HikariCP:3.4.5")
     implementation("mysql:mysql-connector-java:8.0.22")
 
+    implementation("com.expediagroup:graphql-kotlin-schema-generator:4.0.0-alpha.8")
+
     jooqGenerator("mysql:mysql-connector-java:8.0.22")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
 }
