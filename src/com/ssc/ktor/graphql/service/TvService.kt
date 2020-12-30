@@ -1,7 +1,7 @@
 package com.ssc.ktor.graphql.service
 
 import com.ssc.ktor.graphql.database.Database
-import com.ssc.ktor.graphql.domain.Channel
+import com.ssc.ktor.graphql.schema.models.Channel
 import com.ssc.ktor.graphql.domain.Pageable
 import io.ktor.util.*
 import com.ssc.jooq.db.tables.Channel.CHANNEL as ChannelTable

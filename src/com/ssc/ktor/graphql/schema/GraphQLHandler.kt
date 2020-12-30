@@ -40,7 +40,8 @@ class GraphQLHandler {
             TopLevelObject(HelloQueryService()),
             TopLevelObject(BookQueryService()),
             TopLevelObject(CourseQueryService()),
-            TopLevelObject(UniversityQueryService())
+            TopLevelObject(UniversityQueryService()),
+            TopLevelObject(ChannelOueryService())
         )
 
         private val mutations = listOf(
