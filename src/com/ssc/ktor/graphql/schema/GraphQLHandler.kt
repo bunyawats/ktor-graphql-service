@@ -29,27 +29,37 @@ import io.ktor.application.*
 import io.ktor.request.*
 import io.ktor.response.*
 import org.dataloader.DataLoaderRegistry
+import org.kodein.di.DI
 import java.io.IOException
 
 data class AuthorizedContext(val authorizedUser: User? = null, var guestUUID: String? = null)
 
 class GraphQLHandler {
+
     companion object {
-        private val config = SchemaGeneratorConfig(supportedPackages = listOf("com.ssc.ktor.graphql.schema"))
-        private val queries = listOf(
-            TopLevelObject(HelloQueryService()),
-            TopLevelObject(BookQueryService()),
-            TopLevelObject(CourseQueryService()),
-            TopLevelObject(UniversityQueryService()),
-            TopLevelObject(ChannelOueryService())
-        )
 
-        private val mutations = listOf(
-            TopLevelObject(LoginMutationService())
-        )
+        private lateinit var graphQL: GraphQL
 
-        private val graphQLSchema = toSchema(config, queries, mutations)
-        val graphQL = GraphQL.newGraphQL(graphQLSchema).build()!!
+        fun initDI(kodein: DI) {
+
+            val config = SchemaGeneratorConfig(supportedPackages = listOf("com.ssc.ktor.graphql.schema"))
+
+            val queries = listOf(
+                TopLevelObject(HelloQueryService()),
+                TopLevelObject(BookQueryService()),
+                TopLevelObject(CourseQueryService()),
+                TopLevelObject(UniversityQueryService()),
+                TopLevelObject(ChannelOueryService(kodein))
+            )
+
+            val mutations = listOf(
+                TopLevelObject(LoginMutationService())
+            )
+
+            val graphQLSchema = toSchema(config, queries, mutations)
+
+            graphQL = GraphQL.newGraphQL(graphQLSchema).build()!!
+        }
     }
 
     private val mapper = jacksonObjectMapper()

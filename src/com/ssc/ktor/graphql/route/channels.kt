@@ -1,18 +1,19 @@
 package com.ssc.ktor.graphql.route
 
-import com.ssc.ktor.graphql.schema.models.Channel
 import com.ssc.ktor.graphql.domain.Pageable
+import com.ssc.ktor.graphql.schema.models.Channel
 import com.ssc.ktor.graphql.service.TvService
 import io.ktor.application.*
 import io.ktor.locations.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import org.kodein.di.*
+import org.kodein.di.DI
+import org.kodein.di.instance
 
 fun Route.channels(kodein: DI) {
 
-    val  tvService by kodein.instance<TvService>()
+    val tvService: TvService by kodein.instance<TvService>()
 
     // ../channels
     get<ChannelsLocation> { location ->

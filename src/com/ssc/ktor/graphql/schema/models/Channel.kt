@@ -1,6 +1,7 @@
 package com.ssc.ktor.graphql.schema.models
 
 import com.expediagroup.graphql.annotations.GraphQLDescription
+import com.ssc.ktor.graphql.service.TvService
 
 @GraphQLDescription("Contains Channel Metadata, id, title, archived and rank.")
 data class Channel(
@@ -9,22 +10,13 @@ data class Channel(
     val logo: String,
     val archived: Boolean,
     val rank: Int?
-    ) {
+) {
 
     @Suppress("unused")
     companion object {
 
-        fun search(id: Int): Channel {
-
-
-
-            return Channel(
-                id = 20,
-                title = "Kotlin",
-                logo = "Kotlon Logo",
-                archived = false,
-                rank = 30
-            )
+        suspend fun search(id: Int, tvService: TvService): Channel {
+            return tvService.getChannel(id)
         }
     }
 }

@@ -7,6 +7,7 @@ import com.ssc.ktor.graphql.errors.statusPageConfiguration
 import com.ssc.ktor.graphql.route.channels
 import com.ssc.ktor.graphql.route.graphqlRoute
 import com.ssc.ktor.graphql.route.sampleRoute
+import com.ssc.ktor.graphql.schema.GraphQLHandler
 import com.ssc.ktor.graphql.service.TvService
 import freemarker.cache.ClassTemplateLoader
 import io.ktor.application.*
@@ -17,9 +18,11 @@ import io.ktor.http.*
 import io.ktor.jackson.*
 import io.ktor.locations.*
 import io.ktor.routing.*
-import org.kodein.di.*
+import org.kodein.di.DI
+import org.kodein.di.bind
+import org.kodein.di.provider
+import org.kodein.di.singleton
 import java.text.DateFormat
-import org.kodein.di.singleton as singleton
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -54,6 +57,8 @@ fun Application.module(testing: Boolean = false) {
         bind<Database>() with singleton { database }
         bind<TvService>() with provider { tvService }
     }
+
+    GraphQLHandler.initDI(kodein)
 
     install(Locations)
     install(StatusPages, statusPageConfiguration)

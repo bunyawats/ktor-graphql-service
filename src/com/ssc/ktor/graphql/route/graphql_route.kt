@@ -11,11 +11,12 @@ import org.kodein.di.instance
 
 fun Route.graphqlRoute(kodein: DI) {
 
-    val  tvService by kodein.instance<TvService>()
+    val tvService by kodein.instance<TvService>()
+    val graphQLHandler = GraphQLHandler()
 
 
     post("graphql") {
-        GraphQLHandler().handle(this.call)
+        graphQLHandler.handle(this.call)
     }
 
     get("playground") {
