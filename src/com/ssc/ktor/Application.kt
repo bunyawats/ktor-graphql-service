@@ -4,8 +4,9 @@ import com.expediagroup.graphql.SchemaGeneratorConfig
 import com.expediagroup.graphql.TopLevelObject
 import com.expediagroup.graphql.toSchema
 import com.fasterxml.jackson.databind.SerializationFeature
+import com.ssc.ktor.database.ChannelRepository
 import com.ssc.ktor.database.Database
-import com.ssc.ktor.database.FlywayFeature
+import com.ssc.ktor.database.MovieRepository
 import com.ssc.ktor.graphql.*
 import com.ssc.ktor.route.channels
 import com.ssc.ktor.route.graphqlRoute
@@ -54,7 +55,9 @@ fun Application.module(testing: Boolean = false) {
     }
 
     val database = Database(this)
-    val tvService = TvService(database)
+    val channelRepo = ChannelRepository(database)
+    val movieRepo = MovieRepository(database)
+    val tvService = TvService(channelRepo, movieRepo)
     val graphQL = initGraphGL(tvService)
 
     val kodein = DI {
