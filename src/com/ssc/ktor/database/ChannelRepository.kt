@@ -1,19 +1,19 @@
 package com.ssc.ktor.database
 
+import com.ssc.jooq.db.tables.Channel.CHANNEL
 import com.ssc.ktor.graphql.models.Channel
 import com.ssc.ktor.service.domain.Pageable
-import com.ssc.jooq.db.tables.Channel.CHANNEL as ChannelTable
 
 class ChannelRepository constructor(private val database: Database) {
 
     suspend fun getChannels(pageable: Pageable): List<Channel> {
 
-        println(" \n in TvService.getChannels $pageable \n ")
+        println(" \n in ChannelRepository.getChannels $pageable \n ")
 
         return database.query {
             it.select()
-                .from(ChannelTable)
-                .orderBy(ChannelTable.RANK.desc())
+                .from(CHANNEL)
+                .orderBy(CHANNEL.RANK.desc())
                 .offset(pageable.size * pageable.page)
                 .limit(pageable.size)
                 .fetchInto(Channel::class.java)
@@ -22,22 +22,22 @@ class ChannelRepository constructor(private val database: Database) {
 
     suspend fun getChannel(id: Int): Channel? {
 
-        println(" \n in TvService.getChannel $id \n ")
+        println(" \n in ChannelRepository.getChannel $id \n ")
 
         return database.query {
             it.select()
-                .from(ChannelTable)
-                .where(ChannelTable.ID.eq(id))
+                .from(CHANNEL)
+                .where(CHANNEL.ID.eq(id))
                 .fetchOneInto(Channel::class.java)
         }
     }
 
     suspend fun storeChannel(channel: Channel): Channel {
 
-        println(" \n in TvService.storeChannel $channel \n ")
+        println(" \n in ChannelRepository.storeChannel $channel \n ")
 
         val id = database.write {
-            it.newRecord(ChannelTable)
+            it.newRecord(CHANNEL)
                 .apply {
                     title = channel.title
                     logo = channel.logo
@@ -50,13 +50,13 @@ class ChannelRepository constructor(private val database: Database) {
 
     suspend fun updateChannel(channel: Channel): Channel {
 
-        println(" \n in TvService.updateChannel $channel \n ")
+        println(" \n in ChannelRepository.updateChannel $channel \n ")
 
         database.write {
 
             it.fetchOne(
-                ChannelTable,
-                ChannelTable.ID.eq(channel.id)
+                CHANNEL,
+                CHANNEL.ID.eq(channel.id)
             )?.apply {
                 title = channel.title
                 logo = channel.logo
@@ -70,8 +70,8 @@ class ChannelRepository constructor(private val database: Database) {
 
     suspend fun deleteChannel(id: Int): Boolean {
         val deleted = database.write {
-            it.deleteFrom(ChannelTable)
-                .where(ChannelTable.ID.eq(id))
+            it.deleteFrom(CHANNEL)
+                .where(CHANNEL.ID.eq(id))
                 .execute()
         }
         return deleted == 1

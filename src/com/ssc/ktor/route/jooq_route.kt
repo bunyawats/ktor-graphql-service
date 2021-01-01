@@ -1,6 +1,7 @@
 package com.ssc.ktor.route
 
 import com.ssc.ktor.graphql.models.Channel
+import com.ssc.ktor.graphql.models.Movie
 import com.ssc.ktor.service.TvService
 import com.ssc.ktor.service.domain.Pageable
 import io.ktor.application.*
@@ -66,6 +67,18 @@ fun Route.channels(kodein: DI) {
             )
         )
     }
+
+    // ../movies
+    get<MoviesLocation> { location ->
+        call.respond(
+            SuccessResp.of(
+                tvService.getMovies(
+                ).map {
+                    MovieResponse.fromMovie(it)
+                }
+            )
+        )
+    }
 }
 
 data class ChannelRequest(
@@ -104,4 +117,22 @@ data class ChannelsLocation(
 
     @Location("/{id}")
     data class ChannelLocation(val id: Int)
+}
+
+@Location("movies")
+class MoviesLocation
+
+data class MovieResponse(
+    val id: Int?,
+    val title: String,
+    val year: Int,
+    val budget: Long,
+    val channelId: Int?
+) {
+
+    companion object {
+        fun fromMovie(movie: Movie) = with(movie) {
+            MovieResponse(id!!, title, year, budget, channelId!!)
+        }
+    }
 }
