@@ -64,9 +64,9 @@ fun Application.module(testing: Boolean = false) {
 
     install(Locations)
     install(StatusPages, statusPageConfiguration)
-    install(FlywayFeature) {
-        dataSource = database.connectionPool
-    }
+//    install(FlywayFeature) {
+//        dataSource = database.connectionPool
+//    }
     install(ContentNegotiation) {
         jackson {
             enable(SerializationFeature.INDENT_OUTPUT)

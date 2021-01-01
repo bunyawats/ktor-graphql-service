@@ -12,6 +12,7 @@ plugins {
     kotlin("jvm") version "1.4.21"
     id("nu.studer.jooq") version "5.2"
     id("com.github.johnrengelman.shadow") version "5.1.0"
+    id("org.flywaydb.flyway") version "7.3.2"
 }
 
 group = "com.ssc.ktor.graphql"
@@ -71,6 +72,18 @@ kotlin.sourceSets["test"].kotlin.srcDirs("test")
 sourceSets["main"].resources.srcDirs("resources")
 sourceSets["test"].resources.srcDirs("testresources")
 
+val db_url: String by project
+val db_username: String by project
+val db_password: String by project
+
+flyway {
+    url = db_url
+    user = db_username
+    password = db_password
+    baselineOnMigrate = true
+    locations = arrayOf("filesystem:resources/db/migrations")
+}
+
 jooq {
     version.set("3.14.4")
     edition.set(JooqEdition.OSS)
@@ -81,9 +94,9 @@ jooq {
                 logging = org.jooq.meta.jaxb.Logging.WARN
                 jdbc.apply {
                     driver = "com.mysql.cj.jdbc.Driver"
-                    url = "jdbc:mysql://localhost:3306/ktorgraphql"
-                    user = "ktorgraphql"
-                    password = "ktorgraphql"
+                    url = db_url
+                    user = db_username
+                    password = db_password
                     properties.add(Property().withKey("PAGE_SIZE").withValue("2048"))
                 }
                 generator.apply {
