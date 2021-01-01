@@ -93,7 +93,9 @@ fun initGraphGL(tvService: TvService): GraphQL {
         TopLevelObject(BookQueryService()),
         TopLevelObject(CourseQueryService()),
         TopLevelObject(UniversityQueryService()),
-        TopLevelObject(ChannelQueryService(tvService))
+
+        TopLevelObject(ChannelQueryService(tvService)),
+        TopLevelObject(MovieQueryService(tvService))
     )
 
     val mutations = listOf(

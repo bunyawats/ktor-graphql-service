@@ -72,9 +72,8 @@ fun Route.channels(kodein: DI) {
     get<MoviesLocation> { location ->
         call.respond(
             SuccessResp.of(
-                tvService.getMovies(
-                ).map {
-                    MovieResponse.fromMovie(it)
+                tvService.getMovies().map {
+                    MovieResponse.fromMovieModel(it)
                 }
             )
         )
@@ -131,7 +130,7 @@ data class MovieResponse(
 ) {
 
     companion object {
-        fun fromMovie(movie: Movie) = with(movie) {
+        fun fromMovieModel(movie: Movie) = with(movie) {
             MovieResponse(id!!, title, year, budget, channelId!!)
         }
     }
