@@ -16,7 +16,8 @@ data class Channel(
 ) {
     suspend fun movies(dataFetchingEnvironment: DataFetchingEnvironment): List<Movie>? {
 
-        return dataFetchingEnvironment.getDataLoader<List<Int>, List<Movie>>(BATCH_MOVIE_LOADER_NAME)
+        return dataFetchingEnvironment
+            .getDataLoader<List<Int>, List<Movie>>(BATCH_MOVIE_LOADER_NAME)
             .load(movieIds).await()
     }
 }

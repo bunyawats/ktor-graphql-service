@@ -7,6 +7,7 @@ import graphql.ExceptionWhileDataFetching
 import graphql.ExecutionInput
 import graphql.ExecutionResult
 import graphql.GraphQL
+import graphql.schema.GraphQLSchema
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.request.*
@@ -32,15 +33,14 @@ fun Route.graphqlRoute(kodein: DI) {
 
 data class AuthorizedContext(val authorizedUser: User? = null, var guestUUID: String? = null)
 
-const val BATCH_MOVIE_LOADER_NAME = "BATCH_MOVIE_LOADER"
 
 class GraphQLHandler(kodein: DI) {
 
-    private val graphQL by kodein.instance<GraphQL>()
+    private val graphQLSchema by kodein.instance<GraphQLSchema>()
     private val dataLoaderRegistry by kodein.instance<DataLoaderRegistry>()
 
     private val mapper = jacksonObjectMapper()
-
+    private val graphQL = GraphQL.newGraphQL(graphQLSchema).build()!!
 
     /**
      * Get payload from the request.
