@@ -42,6 +42,8 @@ class GraphQLHandler(private val graphQL: GraphQL) {
         dataLoaderRegistry.register(UNIVERSITY_LOADER_NAME, batchUniversityLoader)
         dataLoaderRegistry.register(COURSE_LOADER_NAME, batchCourseLoader)
         dataLoaderRegistry.register(BATCH_BOOK_LOADER_NAME, batchBookLoader)
+
+        dataLoaderRegistry.register(BATCH_MOVIE_LOADER_NAME, batchMovieLoader)
     }
 
     /**

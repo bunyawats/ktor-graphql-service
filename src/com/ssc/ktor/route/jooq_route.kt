@@ -131,7 +131,7 @@ data class MovieResponse(
 
     companion object {
         fun fromMovieModel(movie: Movie) = with(movie) {
-            MovieResponse(id!!, title, year, budget, channelId!!)
+            MovieResponse(id!!, title, year, budget, channelId)
         }
     }
 }
