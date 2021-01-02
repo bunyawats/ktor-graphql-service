@@ -28,3 +28,5 @@ class BookQueryService {
 }
 
 data class BookSearchParameters(val ids: List<Long>)
+
+

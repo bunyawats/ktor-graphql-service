@@ -3,6 +3,7 @@ package com.ssc.ktor.route
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.ssc.ktor.graphql.models.*
+import com.ssc.ktor.service.TvService
 import graphql.ExceptionWhileDataFetching
 import graphql.ExecutionInput
 import graphql.ExecutionResult
@@ -12,15 +13,17 @@ import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import kotlinx.coroutines.runBlocking
+import org.dataloader.DataLoader
 import org.dataloader.DataLoaderRegistry
 import org.kodein.di.DI
 import org.kodein.di.instance
 import java.io.IOException
+import java.util.concurrent.CompletableFuture.supplyAsync
 
 fun Route.graphqlRoute(kodein: DI) {
 
-    val graphQL by kodein.instance<GraphQL>()
-    val graphQLHandler = GraphQLHandler(graphQL)
+    val graphQLHandler = GraphQLHandler(kodein)
 
     post("graphql") {
         graphQLHandler.handle(this.call)
@@ -33,7 +36,12 @@ fun Route.graphqlRoute(kodein: DI) {
 
 data class AuthorizedContext(val authorizedUser: User? = null, var guestUUID: String? = null)
 
-class GraphQLHandler(private val graphQL: GraphQL) {
+const val BATCH_MOVIE_LOADER_NAME = "BATCH_MOVIE_LOADER"
+
+class GraphQLHandler(kodein: DI) {
+
+    val graphQL by kodein.instance<GraphQL>()
+    val tvService by kodein.instance<TvService>()
 
     private val mapper = jacksonObjectMapper()
     private val dataLoaderRegistry = DataLoaderRegistry()
@@ -43,8 +51,26 @@ class GraphQLHandler(private val graphQL: GraphQL) {
         dataLoaderRegistry.register(COURSE_LOADER_NAME, batchCourseLoader)
         dataLoaderRegistry.register(BATCH_BOOK_LOADER_NAME, batchBookLoader)
 
+        val batchMovieLoader = DataLoader<List<Int>, List<Movie>> { ids ->
+            supplyAsync {
+                print("\n movies ids list:  $ids")
+
+                runBlocking {
+
+                    val allMovies = tvService.getMovies()
+
+                    ids.fold(mutableListOf()) { acc: MutableList<List<Movie>>, idSet ->
+                        acc.add(allMovies.filter { idSet.contains(it.id) })
+                        acc
+                    }
+
+                }
+
+            }
+        }
         dataLoaderRegistry.register(BATCH_MOVIE_LOADER_NAME, batchMovieLoader)
     }
+
 
     /**
      * Get payload from the request.

@@ -46,7 +46,7 @@ data class Course(
     }
 
     companion object {
-        suspend fun search(ids: List<Long>): List<Course> {
+        fun search(ids: List<Long>): List<Course> {
             return listOf(
                 Course(id = 1, name = "Biology 101", universityId = 1, bookIds = listOf(1, 2)),
                 Course(id = 2, name = "Cultural Anthropology", universityId = 1),

@@ -18,19 +18,19 @@ package com.ssc.ktor.graphql.models
 import graphql.GraphQLException
 import kotlinx.coroutines.runBlocking
 import org.dataloader.DataLoader
-import java.util.concurrent.CompletableFuture
+import java.util.concurrent.CompletableFuture.supplyAsync
 
 const val UNIVERSITY_LOADER_NAME = "UNIVERSITY_LOADER"
 
 val batchUniversityLoader = DataLoader<Long, University?> { ids ->
-    CompletableFuture.supplyAsync {
+    supplyAsync {
         runBlocking { University.search(ids).toMutableList() }
     }
 }
 
 class University(val id: Long, val name: String? = null) {
     companion object {
-        suspend fun search(ids: List<Long>): List<University> =
+        fun search(ids: List<Long>): List<University> =
             listOf(
                 University(id = 1, name = "University of Nebraska-Lincoln"),
                 University(id = 2, name = "Kansas State University"),
