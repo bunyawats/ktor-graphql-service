@@ -8,7 +8,7 @@ import java.util.concurrent.CompletableFuture
 const val BATCH_MOVIE_LOADER_NAME = "BATCH_MOVIE_LOADER"
 
 
-val batchMovieLoader = DataLoader<List<Long>, List<Movie>> { ids ->
+val batchMovieLoader = DataLoader< List<Long>, List<Movie> > { ids ->
     CompletableFuture.supplyAsync {
 
         ids.fold(mutableListOf()) { acc: MutableList<List<Movie>>, _ ->

@@ -58,7 +58,7 @@ dependencies {
     implementation("com.zaxxer:HikariCP:3.4.5")
     implementation("mysql:mysql-connector-java:8.0.22")
 
-    implementation("com.expediagroup:graphql-kotlin-schema-generator:4.0.0-alpha.8")
+    implementation("com.expediagroup:graphql-kotlin-schema-generator:4.0.0-alpha.9")
     implementation("org.kodein.di:kodein-di:7.2.0")
 
     jooqGenerator("mysql:mysql-connector-java:8.0.22")

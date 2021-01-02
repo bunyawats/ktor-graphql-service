@@ -41,9 +41,8 @@ data class Course(
     }
 
     suspend fun books(dataFetchingEnvironment: DataFetchingEnvironment): List<Book>? {
-        val books = dataFetchingEnvironment.getDataLoader<List<Long>, List<Book>>(BATCH_BOOK_LOADER_NAME)
+        return dataFetchingEnvironment.getDataLoader<List<Long>, List<Book>>(BATCH_BOOK_LOADER_NAME)
             .load(bookIds).await()
-        return books
     }
 
     companion object {
