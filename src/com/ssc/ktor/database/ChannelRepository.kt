@@ -1,6 +1,7 @@
 package com.ssc.ktor.database
 
-import com.ssc.jooq.db.tables.Channel.CHANNEL
+import com.ssc.jooq.db.Tables.CHANNEL
+import com.ssc.jooq.db.Tables.MOVIE
 import com.ssc.ktor.graphql.models.Channel
 import com.ssc.ktor.service.domain.Pageable
 
@@ -24,11 +25,19 @@ class ChannelRepository constructor(private val database: Database) {
 
         println(" \n in ChannelRepository.getChannel $id \n ")
 
-        return database.query {
-            it.select()
+        return database.query { dsl ->
+            var channel = dsl.select()
                 .from(CHANNEL)
                 .where(CHANNEL.ID.eq(id))
                 .fetchOneInto(Channel::class.java)
+
+            channel?.apply {
+                movieIds = dsl.select(MOVIE.ID)
+                    .from(MOVIE)
+                    .where(MOVIE.CHANNEL_ID.eq(id))
+                    .fetchInto(Int::class.java)
+
+            }
         }
     }
 

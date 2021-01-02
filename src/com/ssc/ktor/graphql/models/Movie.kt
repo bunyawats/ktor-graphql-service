@@ -8,22 +8,22 @@ import java.util.concurrent.CompletableFuture
 const val BATCH_MOVIE_LOADER_NAME = "BATCH_MOVIE_LOADER"
 
 
-val batchMovieLoader = DataLoader< List<Long>, List<Movie> > { ids ->
+val batchMovieLoader = DataLoader<List<Int>, List<Movie>> { ids ->
     CompletableFuture.supplyAsync {
+        print("\n movies ids list:  $ids")
 
-        ids.fold(mutableListOf()) { acc: MutableList<List<Movie>>, _ ->
-
-            val matchingMovies = mutableListOf(
-                Movie(
-                    id = 1,
-                    title = "Onc Price",
-                    year = 2020,
-                    budget = 5_000_000,
-                    channelId = 1
-                )
+        val allMovies = mutableListOf(
+            Movie(
+                id = 1,
+                title = "Onc Price",
+                year = 2020,
+                budget = 5_000_000,
+                channelId = 1
             )
+        )
 
-            acc.add(matchingMovies)
+        ids.fold(mutableListOf()) { acc: MutableList<List<Movie>>, idSet ->
+            acc.add(allMovies.filter { idSet.contains(it.id) })
             acc
         }
     }

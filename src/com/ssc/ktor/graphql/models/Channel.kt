@@ -11,11 +11,11 @@ data class Channel(
     val logo: String,
     val archived: Boolean,
     val rank: Int?,
-//    val movieIds: List<Long>? = listOf(1, 2)
+    var movieIds: List<Int>?
 ) {
     suspend fun movies(dataFetchingEnvironment: DataFetchingEnvironment): List<Movie>? {
 
-        return dataFetchingEnvironment.getDataLoader<List<Long>, List<Movie>>(BATCH_MOVIE_LOADER_NAME)
-            .load(listOf(1, 2)).await()
+        return dataFetchingEnvironment.getDataLoader<List<Int>, List<Movie>>(BATCH_MOVIE_LOADER_NAME)
+            .load(movieIds).await()
     }
 }
