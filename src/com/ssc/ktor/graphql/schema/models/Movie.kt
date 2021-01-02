@@ -1,4 +1,4 @@
-package com.ssc.ktor.graphql.models
+package com.ssc.ktor.graphql.schema.models
 
 import com.expediagroup.graphql.annotations.GraphQLDescription
 

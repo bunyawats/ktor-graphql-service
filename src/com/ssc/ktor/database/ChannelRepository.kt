@@ -2,7 +2,7 @@ package com.ssc.ktor.database
 
 import com.ssc.jooq.db.Tables.CHANNEL
 import com.ssc.jooq.db.Tables.MOVIE
-import com.ssc.ktor.graphql.models.Channel
+import com.ssc.ktor.graphql.schema.models.Channel
 import com.ssc.ktor.service.domain.Pageable
 
 class ChannelRepository constructor(private val database: Database) {

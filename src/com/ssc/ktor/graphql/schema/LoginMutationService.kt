@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ssc.ktor.graphql
+package com.ssc.ktor.graphql.schema
 
-import com.ssc.ktor.graphql.models.User
+import com.ssc.ktor.graphql.schema.models.User
 
 data class AuthPayload(val token: String? = null, val user: User? = null)
 

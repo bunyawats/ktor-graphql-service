@@ -13,8 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ssc.ktor.graphql
+package com.ssc.ktor.graphql.schema
 
-class HelloQueryService {
-    fun hello() = "World!"
+import com.expediagroup.graphql.annotations.GraphQLDescription
+import com.ssc.ktor.graphql.schema.models.Book
+
+/**
+ * Provide Search options for book data
+ */
+class BookQueryService {
+    @GraphQLDescription("Return list of books based on BookSearchParameter options")
+    @Suppress("unused")
+    suspend fun searchBooks(params: BookSearchParameters) = Book.search(params.ids)
 }
+
+data class BookSearchParameters(val ids: List<Long>)
+
+

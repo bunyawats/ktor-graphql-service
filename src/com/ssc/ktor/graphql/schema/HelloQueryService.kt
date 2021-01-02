@@ -13,12 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ssc.ktor.graphql
+package com.ssc.ktor.graphql.schema
 
-import com.ssc.ktor.graphql.models.Course
-
-class CourseQueryService {
-    suspend fun searchCourses(params: CourseSearchParameters) = Course.search(params.ids)
+class HelloQueryService {
+    fun hello() = "World!"
 }
-
-data class CourseSearchParameters(val ids: List<Long>)

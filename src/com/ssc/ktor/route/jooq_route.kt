@@ -1,7 +1,7 @@
 package com.ssc.ktor.route
 
-import com.ssc.ktor.graphql.models.Channel
-import com.ssc.ktor.graphql.models.Movie
+import com.ssc.ktor.graphql.schema.models.Channel
+import com.ssc.ktor.graphql.schema.models.Movie
 import com.ssc.ktor.service.TvService
 import com.ssc.ktor.service.domain.Pageable
 import io.ktor.application.*

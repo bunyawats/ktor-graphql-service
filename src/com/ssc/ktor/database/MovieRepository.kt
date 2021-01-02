@@ -1,7 +1,7 @@
 package com.ssc.ktor.database
 
 import com.ssc.jooq.db.tables.Movie.MOVIE
-import com.ssc.ktor.graphql.models.Movie
+import com.ssc.ktor.graphql.schema.models.Movie
 
 class MovieRepository constructor(private val database: Database) {
 

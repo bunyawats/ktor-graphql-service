@@ -1,4 +1,4 @@
-package com.ssc.ktor.graphql
+package com.ssc.ktor.graphql.schema
 
 import com.expediagroup.graphql.annotations.GraphQLDescription
 import com.ssc.ktor.service.TvService

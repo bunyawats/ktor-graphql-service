@@ -1,10 +1,10 @@
-package com.ssc.ktor
+package com.ssc.ktor.graphql
 
 import com.expediagroup.graphql.SchemaGeneratorConfig
 import com.expediagroup.graphql.TopLevelObject
 import com.expediagroup.graphql.toSchema
-import com.ssc.ktor.graphql.*
-import com.ssc.ktor.graphql.models.*
+import com.ssc.ktor.graphql.schema.*
+import com.ssc.ktor.graphql.schema.models.*
 import com.ssc.ktor.service.TvService
 import graphql.schema.GraphQLSchema
 import kotlinx.coroutines.runBlocking
@@ -19,7 +19,7 @@ class GraphQLHelper {
     companion object {
         fun initGraphQLSchema(tvService: TvService): GraphQLSchema {
 
-            val config = SchemaGeneratorConfig(supportedPackages = listOf("com.ssc.ktor.graphql"))
+            val config = SchemaGeneratorConfig(supportedPackages = listOf("com.ssc.ktor.graphql.schema"))
 
             val queries = listOf(
                 TopLevelObject(HelloQueryService()),

@@ -1,7 +1,7 @@
-package com.ssc.ktor.graphql.models
+package com.ssc.ktor.graphql.schema.models
 
 import com.expediagroup.graphql.annotations.GraphQLDescription
-import com.ssc.ktor.route.BATCH_MOVIE_LOADER_NAME
+import com.ssc.ktor.graphql.BATCH_MOVIE_LOADER_NAME
 import graphql.schema.DataFetchingEnvironment
 import kotlinx.coroutines.future.await
 

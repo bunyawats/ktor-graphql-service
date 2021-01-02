@@ -2,8 +2,8 @@ package com.ssc.ktor.service
 
 import com.ssc.ktor.database.ChannelRepository
 import com.ssc.ktor.database.MovieRepository
-import com.ssc.ktor.graphql.models.Channel
-import com.ssc.ktor.graphql.models.Movie
+import com.ssc.ktor.graphql.schema.models.Channel
+import com.ssc.ktor.graphql.schema.models.Movie
 import com.ssc.ktor.service.domain.Pageable
 
 class TvService(

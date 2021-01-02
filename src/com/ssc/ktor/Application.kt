@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.ssc.ktor.database.ChannelRepository
 import com.ssc.ktor.database.Database
 import com.ssc.ktor.database.MovieRepository
+import com.ssc.ktor.graphql.GraphQLHelper
 import com.ssc.ktor.route.channels
 import com.ssc.ktor.route.graphqlRoute
 import com.ssc.ktor.route.response.statusPageConfiguration
@@ -54,6 +55,7 @@ fun Application.module(testing: Boolean = false) {
     val database = Database(this)
     val channelRepo = ChannelRepository(database)
     val movieRepo = MovieRepository(database)
+
     val tvService = TvService(channelRepo, movieRepo)
     val graphQLSchema = GraphQLHelper.initGraphQLSchema(tvService)
     val dataLoaderRegistry = GraphQLHelper.initDataLoaderRegistry(tvService)
