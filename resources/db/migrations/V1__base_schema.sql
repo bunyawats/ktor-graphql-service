@@ -6,6 +6,7 @@ CREATE TABLE `channel` (
   `updated_at` timestamp NULL DEFAULT now(),
   `archived` tinyint DEFAULT '1',
   `rank` int DEFAULT '0',
+  `json` json DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `channel_title_uindex` (`title`)
 ) ENGINE=InnoDB;

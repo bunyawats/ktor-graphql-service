@@ -6,6 +6,7 @@ import com.ssc.ktor.graphql.schema.models.Channel
 import com.ssc.ktor.graphql.schema.models.Movie
 import com.ssc.ktor.service.domain.Pageable
 
+
 class TvService(
     private val channelRepo: ChannelRepository,
     private val movieRepo: MovieRepository
@@ -32,6 +33,7 @@ class TvService(
     suspend fun updateChannel(channel: Channel): Channel {
 
         println(" \n in TvService.updateChannel $channel \n ")
+
         return channelRepo.updateChannel(channel)
     }
 
@@ -47,4 +49,5 @@ class TvService(
         println(" \n in TvService.getMovies \n ")
         return movieRepo.getMovies()
     }
+
 }

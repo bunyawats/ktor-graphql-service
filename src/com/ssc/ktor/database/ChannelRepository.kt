@@ -1,9 +1,14 @@
 package com.ssc.ktor.database
 
+import com.google.gson.JsonObject
 import com.ssc.jooq.db.Tables.CHANNEL
 import com.ssc.jooq.db.Tables.MOVIE
+import com.ssc.jooq.db.tables.records.ChannelRecord
 import com.ssc.ktor.graphql.schema.models.Channel
 import com.ssc.ktor.service.domain.Pageable
+import org.jooq.JSON
+import org.jooq.RecordMapper
+import java.util.*
 
 class ChannelRepository constructor(private val database: Database) {
 
@@ -21,22 +26,38 @@ class ChannelRepository constructor(private val database: Database) {
         }
     }
 
+    private fun getMapper(): RecordMapper<ChannelRecord, Channel> {
+
+        return RecordMapper<ChannelRecord, Channel> { record ->
+            print(record.json)
+
+            Channel(
+                record.id,
+                record.title,
+                record.logo,
+                record.archived.equals(0),
+                record.rank,
+                null
+            )
+        }
+    }
+
+
     suspend fun getChannel(id: Int): Channel? {
 
         println(" \n in ChannelRepository.getChannel $id \n ")
 
         return database.query { dsl ->
-            var channel = dsl.select()
+            val channel = dsl.select()
                 .from(CHANNEL)
                 .where(CHANNEL.ID.eq(id))
                 .fetchOneInto(Channel::class.java)
 
             channel?.apply {
-                movieIds = dsl.select(MOVIE.ID)
+                movieIds = dsl.select()
                     .from(MOVIE)
                     .where(MOVIE.CHANNEL_ID.eq(id))
-                    .fetchInto(Int::class.java)
-
+                    .fetch(MOVIE.ID)
             }
         }
     }
@@ -51,6 +72,7 @@ class ChannelRepository constructor(private val database: Database) {
                     title = channel.title
                     logo = channel.logo
                     rank = channel.rank
+                    json = createDummyJSON()
                 }
                 .store()
         }
@@ -70,6 +92,7 @@ class ChannelRepository constructor(private val database: Database) {
                 title = channel.title
                 logo = channel.logo
                 rank = channel.rank
+                json = createDummyJSON()
             }?.store()
 
         }
@@ -84,5 +107,12 @@ class ChannelRepository constructor(private val database: Database) {
                 .execute()
         }
         return deleted == 1
+    }
+
+
+    private fun createDummyJSON(): JSON? {
+        val json = JsonObject()
+        json.addProperty("name", "bunyawat [---] " + Date())
+        return JSON.valueOf(json.toString())
     }
 }
