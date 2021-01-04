@@ -28,7 +28,6 @@ import java.text.DateFormat
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
-
 fun Application.module(testing: Boolean = false) {
     install(FreeMarker) {
         templateLoader = ClassTemplateLoader(this::class.java.classLoader, "templates")
@@ -60,17 +59,8 @@ fun Application.module(testing: Boolean = false) {
     val graphQLSchema = GraphQLHelper.initGraphQLSchema(tvService)
     val dataLoaderRegistry = GraphQLHelper.initDataLoaderRegistry(tvService)
 
-//    val kodein = DI {
-//        bind<TvService>() with provider { tvService }
-//        bind<GraphQLSchema>() with provider { graphQLSchema }
-//        bind<DataLoaderRegistry>() with provider { dataLoaderRegistry }
-//    }
-
     install(Locations)
     install(StatusPages, statusPageConfiguration)
-//    install(FlywayFeature) {
-//        dataSource = database.connectionPool
-//    }
     install(ContentNegotiation) {
         jackson {
             enable(SerializationFeature.INDENT_OUTPUT)
@@ -79,14 +69,9 @@ fun Application.module(testing: Boolean = false) {
     }
 
     di {
-
-
         bind() from scoped(CallScope).provider { tvService }
         bind() from scoped(CallScope).provider { graphQLSchema }
         bind() from scoped(CallScope).provider { dataLoaderRegistry }
-//        bind<TvService>() with provider { tvService }
-//        bind<GraphQLSchema>() with provider { graphQLSchema }
-//        bind<DataLoaderRegistry>() with provider { dataLoaderRegistry }
     }
 
     routing {
