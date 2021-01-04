@@ -12,17 +12,15 @@ import io.ktor.application.*
 import io.ktor.request.*
 import io.ktor.response.*
 import org.dataloader.DataLoaderRegistry
-import org.kodein.di.DI
-import org.kodein.di.instance
 import java.io.IOException
 
 
 data class AuthorizedContext(val authorizedUser: User? = null, var guestUUID: String? = null)
 
-class GraphQLHandler(kodein: DI) {
-
-    private val graphQLSchema by kodein.instance<GraphQLSchema>()
-    private val dataLoaderRegistry by kodein.instance<DataLoaderRegistry>()
+class GraphQLHandler(
+    graphQLSchema: GraphQLSchema,
+    private val dataLoaderRegistry: DataLoaderRegistry
+) {
 
     private val mapper = jacksonObjectMapper()
     private val graphQL = GraphQL.newGraphQL(graphQLSchema).build()!!

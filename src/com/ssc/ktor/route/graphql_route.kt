@@ -1,17 +1,28 @@
 package com.ssc.ktor.route
 
 import com.ssc.ktor.graphql.GraphQLHandler
+import graphql.schema.GraphQLSchema
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import org.kodein.di.DI
+import org.dataloader.DataLoaderRegistry
+import org.kodein.di.instance
+import org.kodein.di.ktor.di
+import org.kodein.di.on
 
-fun Route.graphqlRoute(kodein: DI) {
+fun Route.graphqlRoute() {
 
-    val graphQLHandler = GraphQLHandler(kodein)
 
     post("graphql") {
+
+        val graphQLSchema by di().on(call).instance<GraphQLSchema>()
+        val dataLoaderRegistry by di().on(call).instance<DataLoaderRegistry>()
+
+        val graphQLHandler = GraphQLHandler(
+            graphQLSchema,
+            dataLoaderRegistry
+        )
         graphQLHandler.handle(this.call)
     }
 

@@ -9,15 +9,17 @@ import io.ktor.locations.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import org.kodein.di.DI
 import org.kodein.di.instance
+import org.kodein.di.ktor.di
+import org.kodein.di.on
 
-fun Route.channels(kodein: DI) {
-
-    val tvService: TvService by kodein.instance<TvService>()
+fun Route.channels() {
 
     // ../channels
     get<ChannelsLocation> { location ->
+
+        val tvService by di().on(call).instance<TvService>()
+
         call.respond(
             SuccessResp.of(
                 tvService.getChannels(
@@ -30,11 +32,11 @@ fun Route.channels(kodein: DI) {
     }
 
     post<ChannelsLocation> {
-        val channelRequest = call.receive<ChannelRequest>()
 
+        val channelRequest = call.receive<ChannelRequest>()
+        val tvService by di().on(call).instance<TvService>()
 
         println(" post Route.channels $channelRequest \n ")
-
         call.respond(
             SuccessResp.of(
                 ChannelResponse.fromChannel(
@@ -47,7 +49,9 @@ fun Route.channels(kodein: DI) {
     }
 
     put<ChannelsLocation.ChannelLocation> { ch ->
+
         val channelRequest = call.receive<ChannelRequest>()
+        val tvService by di().on(call).instance<TvService>()
 
         call.respond(
             SuccessResp.of(
@@ -61,6 +65,8 @@ fun Route.channels(kodein: DI) {
     }
 
     delete<ChannelsLocation.ChannelLocation> { ch ->
+
+        val tvService by di().on(call).instance<TvService>()
         call.respond(
             SuccessResp.of(
                 tvService.deleteChannel(ch.id)
@@ -70,6 +76,8 @@ fun Route.channels(kodein: DI) {
 
     // ../movies
     get<MoviesLocation> { location ->
+
+        val tvService by di().on(call).instance<TvService>()
         call.respond(
             SuccessResp.of(
                 tvService.getMovies().map {

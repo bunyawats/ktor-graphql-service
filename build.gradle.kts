@@ -60,6 +60,7 @@ dependencies {
 
     implementation("com.expediagroup:graphql-kotlin-schema-generator:4.0.0-alpha.9")
     implementation("org.kodein.di:kodein-di:7.2.0")
+    implementation("org.kodein.di:kodein-di-framework-ktor-server-jvm:7.1.0")
 
     jooqGenerator("mysql:mysql-connector-java:8.0.22")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
