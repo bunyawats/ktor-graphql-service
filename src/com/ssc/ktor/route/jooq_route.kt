@@ -86,10 +86,9 @@ data class ChannelRequest(
     val logo: String,
     val archived: Boolean,
     val rank: Int?,
-    val movieIds: List<Int>?
 ) {
 
-    fun toChannel() = Channel(id, title, logo, archived, rank, movieIds)
+    fun toChannel() = Channel(id, title, logo, archived, rank)
 }
 
 data class ChannelResponse(

@@ -22,8 +22,7 @@ class ChannelRepository constructor(private val database: Database) {
             record.title,
             record.logo,
             isArchived,
-            record.rank,
-            null
+            record.rank
         )
 
         record.json?.apply {

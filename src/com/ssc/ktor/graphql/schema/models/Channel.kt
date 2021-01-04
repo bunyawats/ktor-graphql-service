@@ -12,10 +12,10 @@ data class Channel(
     val title: String,
     val logo: String,
     val archived: Boolean,
-    val rank: Int?,
-    var movieIds: List<Int>?
+    val rank: Int?
 ) {
 
+    internal var movieIds: List<Int>? = null
     internal var jsonData: JsonObject? = null
 
     suspend fun movies(dataFetchingEnvironment: DataFetchingEnvironment): List<Movie>? {
