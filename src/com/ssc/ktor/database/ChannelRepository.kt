@@ -3,6 +3,7 @@ package com.ssc.ktor.database
 import com.google.gson.JsonObject
 import com.ssc.jooq.db.Tables.CHANNEL
 import com.ssc.jooq.db.Tables.MOVIE
+import com.ssc.jooq.db.tables.records.ChannelRecord
 import com.ssc.ktor.graphql.schema.models.Channel
 import com.ssc.ktor.service.domain.Pageable
 import org.jooq.JSON
@@ -10,44 +11,33 @@ import java.util.*
 
 class ChannelRepository constructor(private val database: Database) {
 
+    private val channelMapper: (record: ChannelRecord) -> Channel? = { record ->
+        println("\n json from mysql ${record.json} \n")
+
+        val isArchived = record.archived > 0
+        Channel(
+            record.id,
+            record.title,
+            record.logo,
+            isArchived,
+            record.rank,
+            null
+        )
+    }
+
     suspend fun getChannels(pageable: Pageable): MutableList<Channel> {
 
         println(" \n in ChannelRepository.getChannels $pageable \n ")
 
         return database.query {
+
             it.selectFrom(CHANNEL)
                 .orderBy(CHANNEL.RANK.desc())
                 .offset(pageable.size * pageable.page)
                 .limit(pageable.size)
-                .fetch { record ->
-                    print("\n json from mysql ${record.json} \n")
-
-                    val isArchived = record.archived > 0
-                    Channel(
-                        record.id,
-                        record.title,
-                        record.logo,
-                        isArchived,
-                        record.rank,
-                        null
-                    )
-                }
+                .fetch(channelMapper)
         }
     }
-
-//    var mapper = RecordMapper<ChannelRecord?, Channel?> { record ->
-//        print(record.json)
-//
-//        Channel(
-//            record.id,
-//            record.title,
-//            record.logo,
-//            record.archived.equals(0),
-//            record.rank,
-//            null
-//        )
-//    }
-
 
     suspend fun getChannel(id: Int): Channel? {
 
@@ -56,7 +46,8 @@ class ChannelRepository constructor(private val database: Database) {
         return database.query { dsl ->
             val channel = dsl.selectFrom(CHANNEL)
                 .where(CHANNEL.ID.eq(id))
-                .fetchOneInto(Channel::class.java)
+                .fetchOne(channelMapper)
+
 
             channel?.apply {
                 movieIds = dsl.selectFrom(MOVIE)
