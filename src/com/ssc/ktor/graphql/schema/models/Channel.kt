@@ -1,6 +1,7 @@
 package com.ssc.ktor.graphql.schema.models
 
 import com.expediagroup.graphql.annotations.GraphQLDescription
+import com.google.gson.JsonObject
 import com.ssc.ktor.graphql.BATCH_MOVIE_LOADER_NAME
 import graphql.schema.DataFetchingEnvironment
 import kotlinx.coroutines.future.await
@@ -14,10 +15,21 @@ data class Channel(
     val rank: Int?,
     var movieIds: List<Int>?
 ) {
+
+    internal var jsonData: JsonObject? = null
+
     suspend fun movies(dataFetchingEnvironment: DataFetchingEnvironment): List<Movie>? {
 
         return dataFetchingEnvironment
             .getDataLoader<List<Int>, List<Movie>>(BATCH_MOVIE_LOADER_NAME)
             .load(movieIds).await()
+    }
+
+    fun json(dataFetchingEnvironment: DataFetchingEnvironment): Json? {
+
+        return (jsonData?.get("name")?.asString ?: null)
+            ?.let {
+                Json(it)
+            }
     }
 }
