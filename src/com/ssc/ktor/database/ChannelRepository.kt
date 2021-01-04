@@ -3,16 +3,14 @@ package com.ssc.ktor.database
 import com.google.gson.JsonObject
 import com.ssc.jooq.db.Tables.CHANNEL
 import com.ssc.jooq.db.Tables.MOVIE
-import com.ssc.jooq.db.tables.records.ChannelRecord
 import com.ssc.ktor.graphql.schema.models.Channel
 import com.ssc.ktor.service.domain.Pageable
 import org.jooq.JSON
-import org.jooq.RecordMapper
 import java.util.*
 
 class ChannelRepository constructor(private val database: Database) {
 
-    suspend fun getChannels(pageable: Pageable): List<Channel> {
+    suspend fun getChannels(pageable: Pageable): MutableList<Channel> {
 
         println(" \n in ChannelRepository.getChannels $pageable \n ")
 
@@ -21,25 +19,34 @@ class ChannelRepository constructor(private val database: Database) {
                 .orderBy(CHANNEL.RANK.desc())
                 .offset(pageable.size * pageable.page)
                 .limit(pageable.size)
-                .fetchInto(Channel::class.java)
+                .fetch { record ->
+                    print("\n json from mysql ${record.json} \n")
+
+                    val isArchived = record.archived > 0
+                    Channel(
+                        record.id,
+                        record.title,
+                        record.logo,
+                        isArchived,
+                        record.rank,
+                        null
+                    )
+                }
         }
     }
 
-    private fun getMapper(): RecordMapper<ChannelRecord, Channel> {
-
-        return RecordMapper<ChannelRecord, Channel> { record ->
-            print(record.json)
-
-            Channel(
-                record.id,
-                record.title,
-                record.logo,
-                record.archived.equals(0),
-                record.rank,
-                null
-            )
-        }
-    }
+//    var mapper = RecordMapper<ChannelRecord?, Channel?> { record ->
+//        print(record.json)
+//
+//        Channel(
+//            record.id,
+//            record.title,
+//            record.logo,
+//            record.archived.equals(0),
+//            record.rank,
+//            null
+//        )
+//    }
 
 
     suspend fun getChannel(id: Int): Channel? {
@@ -107,7 +114,7 @@ class ChannelRepository constructor(private val database: Database) {
     }
 
 
-    private fun createDummyJSON(): JSON? {
+    private fun createDummyJSON(): JSON {
         val json = JsonObject()
         json.addProperty("name", "bunyawat [---] " + Date())
         return JSON.valueOf(json.toString())

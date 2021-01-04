@@ -12,7 +12,7 @@ class TvService(
     private val movieRepo: MovieRepository
 ) {
 
-    suspend fun getChannels(pageable: Pageable): List<Channel> {
+    suspend fun getChannels(pageable: Pageable): MutableList<Channel> {
 
         println(" \n in TvService.getChannels $pageable \n ")
         return channelRepo.getChannels(pageable)
