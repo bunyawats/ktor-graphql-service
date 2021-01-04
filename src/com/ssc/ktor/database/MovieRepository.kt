@@ -10,7 +10,7 @@ class MovieRepository constructor(private val database: Database) {
         println(" \n in MovieRepository.getMovies \n ")
 
         return database.query {
-            it.select().from(MOVIE).fetchInto(Movie::class.java)
+            it.selectFrom(MOVIE).fetchInto(Movie::class.java)
         }
     }
 }

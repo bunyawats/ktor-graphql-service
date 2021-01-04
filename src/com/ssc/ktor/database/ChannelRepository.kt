@@ -17,8 +17,7 @@ class ChannelRepository constructor(private val database: Database) {
         println(" \n in ChannelRepository.getChannels $pageable \n ")
 
         return database.query {
-            it.select()
-                .from(CHANNEL)
+            it.selectFrom(CHANNEL)
                 .orderBy(CHANNEL.RANK.desc())
                 .offset(pageable.size * pageable.page)
                 .limit(pageable.size)
@@ -48,14 +47,12 @@ class ChannelRepository constructor(private val database: Database) {
         println(" \n in ChannelRepository.getChannel $id \n ")
 
         return database.query { dsl ->
-            val channel = dsl.select()
-                .from(CHANNEL)
+            val channel = dsl.selectFrom(CHANNEL)
                 .where(CHANNEL.ID.eq(id))
                 .fetchOneInto(Channel::class.java)
 
             channel?.apply {
-                movieIds = dsl.select()
-                    .from(MOVIE)
+                movieIds = dsl.selectFrom(MOVIE)
                     .where(MOVIE.CHANNEL_ID.eq(id))
                     .fetch(MOVIE.ID)
             }
