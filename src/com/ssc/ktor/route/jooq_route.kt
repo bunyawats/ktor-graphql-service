@@ -19,7 +19,6 @@ fun Route.channels() {
     get<ChannelsLocation> { location ->
 
         val tvService by di().on(call).instance<TvService>()
-
         call.respond(
             SuccessResp.of(
                 tvService.getChannels(
@@ -35,7 +34,6 @@ fun Route.channels() {
 
         val channelRequest = call.receive<ChannelRequest>()
         val tvService by di().on(call).instance<TvService>()
-
         println(" post Route.channels $channelRequest \n ")
         call.respond(
             SuccessResp.of(
@@ -52,7 +50,6 @@ fun Route.channels() {
 
         val channelRequest = call.receive<ChannelRequest>()
         val tvService by di().on(call).instance<TvService>()
-
         call.respond(
             SuccessResp.of(
                 ChannelResponse.fromChannel(
