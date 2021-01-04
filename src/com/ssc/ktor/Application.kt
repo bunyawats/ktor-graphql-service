@@ -51,14 +51,6 @@ fun Application.module(testing: Boolean = false) {
         }
     }
 
-    val database = Database(this)
-    val channelRepo = ChannelRepository(database)
-    val movieRepo = MovieRepository(database)
-
-    val tvService = TvService(channelRepo, movieRepo)
-    val graphQLSchema = GraphQLHelper.initGraphQLSchema(tvService)
-    val dataLoaderRegistry = GraphQLHelper.initDataLoaderRegistry(tvService)
-
     install(Locations)
     install(StatusPages, statusPageConfiguration)
     install(ContentNegotiation) {
@@ -67,6 +59,14 @@ fun Application.module(testing: Boolean = false) {
             dateFormat = DateFormat.getDateInstance()
         }
     }
+
+    val database = Database(this)
+    val channelRepo = ChannelRepository(database)
+    val movieRepo = MovieRepository(database)
+
+    val tvService = TvService(channelRepo, movieRepo)
+    val graphQLSchema = GraphQLHelper.initGraphQLSchema(tvService)
+    val dataLoaderRegistry = GraphQLHelper.initDataLoaderRegistry(tvService)
 
     di {
         bind() from scoped(CallScope).provider { tvService }
